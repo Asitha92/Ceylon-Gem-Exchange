@@ -2,7 +2,9 @@ import { useAuth } from '@clerk/expo'
 import { getLocales } from 'expo-localization'
 import { useEffect } from 'react'
 
-const SUPPORTED_LOCALES = ['en', 'si', 'ta'] as const
+// English + Sinhala only for now — Tamil is a deliberately deferred product
+// decision, not an oversight (see CLAUDE.md).
+const SUPPORTED_LOCALES = ['en', 'si'] as const
 type SupportedLocale = (typeof SUPPORTED_LOCALES)[number]
 
 function detectSupportedLocale(): SupportedLocale {

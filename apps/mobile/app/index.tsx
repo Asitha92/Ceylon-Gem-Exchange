@@ -7,17 +7,146 @@ import {
   neutral,
   spacing,
 } from '@ceylon-gems/ui-tokens'
-import { StyleSheet, Text, View } from 'react-native'
+import { useState } from 'react'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import {
+  Avatar,
+  Badge,
+  BottomNavBar,
+  Button,
+  Card,
+  Chip,
+  ConfirmDialog,
+  GhostButton,
+  IconButton,
+  ListRow,
+  ProgressBar,
+  SearchBar,
+  SegmentedControl,
+  SegmentedTabs,
+  StepMeter,
+  TextField,
+  Toggle,
+} from '../components'
 
 const tone = gemTones[defaultGemTone]
 
+// Temporary kitchen-sink screen exercising the full component kit end to
+// end (real Metro bundling + on-device render), not a permanent route —
+// gets replaced once actual screens land.
 export default function Home() {
+  const [search, setSearch] = useState('')
+  const [filter, setFilter] = useState<'buy' | 'rent'>('buy')
+  const [tab, setTab] = useState<'details' | 'seller'>('details')
+  const [chipSelected, setChipSelected] = useState(false)
+  const [notify, setNotify] = useState(true)
+  const [nav, setNav] = useState<'home' | 'profile'>('home')
+  const [confirmVisible, setConfirmVisible] = useState(false)
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Ceylon Gems</Text>
-      <Show when="signed-in" fallback={<Text style={styles.subtitle}>Not signed in.</Text>}>
-        <SignedInGreeting />
-      </Show>
+      <ScrollView contentContainerStyle={styles.content}>
+        <Text style={styles.title}>Ceylon Gems</Text>
+        <Show when="signed-in" fallback={<Text style={styles.subtitle}>Not signed in.</Text>}>
+          <SignedInGreeting />
+        </Show>
+
+        <SearchBar
+          value={search}
+          onChangeText={setSearch}
+          onClear={() => setSearch('')}
+          placeholder="Search gemstones"
+        />
+
+        <TextField label="Email" placeholder="you@example.com" value="" onChangeText={() => {}} />
+
+        <SegmentedControl
+          options={[
+            { label: 'Buy', value: 'buy' },
+            { label: 'Rent', value: 'rent' },
+          ]}
+          value={filter}
+          onChange={setFilter}
+        />
+
+        <SegmentedTabs
+          tabs={[
+            { label: 'Details', value: 'details' },
+            { label: 'Seller', value: 'seller' },
+          ]}
+          value={tab}
+          onChange={setTab}
+        />
+
+        <View style={styles.row}>
+          <Chip
+            label="Sapphire"
+            selected={chipSelected}
+            onPress={() => setChipSelected((v) => !v)}
+          />
+          <Badge label="Verified" />
+          <Badge label="Sold" variant="danger" />
+        </View>
+
+        <Card>
+          <ListRow
+            title="Notifications"
+            subtitle="Push alerts for new offers"
+            trailing={
+              <Toggle
+                value={notify}
+                onValueChange={setNotify}
+                accessibilityLabel="Toggle notifications"
+              />
+            }
+          />
+          <ListRow title="My Ads" subtitle="3 active listings" onPress={() => {}} />
+        </Card>
+
+        <View style={styles.row}>
+          <Avatar initials="AS" />
+          <IconButton
+            icon={<Text style={{ color: neutral.white }}>♥</Text>}
+            accessibilityLabel="Favorite"
+            active
+          />
+        </View>
+
+        <StepMeter totalSteps={4} currentStep={1} />
+        <ProgressBar progress={0.6} />
+
+        <Button label="Continue" onPress={() => {}} />
+        <GhostButton label="Not now" onPress={() => {}} />
+        <Button label="Delete account" danger onPress={() => setConfirmVisible(true)} />
+      </ScrollView>
+
+      <BottomNavBar
+        items={[
+          {
+            value: 'home',
+            label: 'Home',
+            icon: () => <Text style={{ color: neutral.white }}>⌂</Text>,
+          },
+          {
+            value: 'profile',
+            label: 'Profile',
+            icon: () => <Text style={{ color: neutral.white }}>☺</Text>,
+          },
+        ]}
+        value={nav}
+        onChange={setNav}
+      />
+
+      <ConfirmDialog
+        visible={confirmVisible}
+        title="Delete account?"
+        message="This can't be undone."
+        confirmLabel="Delete"
+        cancelLabel="Cancel"
+        destructive
+        onConfirm={() => setConfirmVisible(false)}
+        onCancel={() => setConfirmVisible(false)}
+      />
     </View>
   )
 }
@@ -31,13 +160,16 @@ function SignedInGreeting() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: spacing.sm,
-    // Flat mid-stop as a placeholder — the real gradient + ambient glow
-    // background is a task 3 component (GlassSurface / screen background),
-    // not something to hand-roll here.
     backgroundColor: tone.screen[1],
+  },
+  content: {
+    padding: spacing.lg,
+    gap: spacing.lg,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
   },
   title: {
     fontSize: fontSize['2xl'],
@@ -46,6 +178,6 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontFamily: fontFamilies.en.regular,
-    color: `rgba(255,255,255,0.6)`,
+    color: 'rgba(255,255,255,0.6)',
   },
 })

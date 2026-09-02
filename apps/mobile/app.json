@@ -38,7 +38,8 @@
             "node_modules/@expo-google-fonts/noto-sans-sinhala/800ExtraBold/NotoSansSinhala_800ExtraBold.ttf"
           ]
         }
-      ]
+      ],
+      "expo-image"
     ]
   }
 }
