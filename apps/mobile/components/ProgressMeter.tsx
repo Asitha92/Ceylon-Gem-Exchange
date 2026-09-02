@@ -15,7 +15,11 @@ export function ProgressBar({ progress, tone = defaultGemTone, style }: Progress
   const clamped = Math.max(0, Math.min(1, progress))
 
   return (
-    <View style={[styles.track, style]}>
+    <View
+      style={[styles.track, style]}
+      accessibilityRole="progressbar"
+      accessibilityValue={{ min: 0, max: 100, now: Math.round(clamped * 100) }}
+    >
       <LinearGradient
         colors={[`${palette.cta[0]}1)`, `${palette.cta[1]}1)`]}
         start={{ x: 0, y: 0 }}
@@ -45,7 +49,12 @@ export function StepMeter({
   const palette = gemTones[tone]
 
   return (
-    <View style={[styles.stepRow, style]}>
+    <View
+      style={[styles.stepRow, style]}
+      accessibilityRole="progressbar"
+      accessibilityLabel={`Step ${currentStep + 1} of ${totalSteps}`}
+      accessibilityValue={{ min: 1, max: totalSteps, now: currentStep + 1 }}
+    >
       {Array.from({ length: totalSteps }, (_, index) => {
         const isDone = index <= currentStep
         return (

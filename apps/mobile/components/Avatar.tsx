@@ -12,6 +12,14 @@ interface AvatarProps {
   tone?: GemTone
   /** Small dot in the corner — used for online status or a verified check. */
   badge?: 'online' | 'verified' | null
+  /**
+   * e.g. a seller's name — announced by screen readers. Omit when the photo
+   * is purely decorative next to text that already identifies the person
+   * (e.g. inline in a ListRow with its own title); the avatar is then
+   * hidden from screen readers instead of announcing bare initials or
+   * "image" with no context.
+   */
+  accessibilityLabel?: string
   style?: StyleProp<ViewStyle>
 }
 
@@ -23,13 +31,20 @@ export function Avatar({
   size = 48,
   tone = defaultGemTone,
   badge,
+  accessibilityLabel,
   style,
 }: AvatarProps) {
   const palette = gemTones[tone]
   const fonts = useFontFamily()
 
   return (
-    <View style={[{ width: size, height: size }, style]}>
+    <View
+      style={[{ width: size, height: size }, style]}
+      accessible={accessibilityLabel !== undefined}
+      accessibilityRole={accessibilityLabel !== undefined ? 'image' : undefined}
+      accessibilityLabel={accessibilityLabel}
+      importantForAccessibility={accessibilityLabel === undefined ? 'no-hide-descendants' : 'yes'}
+    >
       {uri ? (
         <Image
           source={{ uri }}

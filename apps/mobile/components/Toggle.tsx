@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native'
 import Animated, {
   interpolateColor,
   useAnimatedStyle,
+  useReducedMotion,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated'
@@ -30,10 +31,11 @@ export function Toggle({
 }: ToggleProps) {
   const palette = gemTones[tone]
   const progress = useSharedValue(value ? 1 : 0)
+  const reduceMotion = useReducedMotion()
 
   useEffect(() => {
-    progress.set(withTiming(value ? 1 : 0, { duration: 160 }))
-  }, [value, progress])
+    progress.set(withTiming(value ? 1 : 0, { duration: reduceMotion ? 0 : 160 }))
+  }, [value, progress, reduceMotion])
 
   const trackStyle = useAnimatedStyle(() => ({
     backgroundColor: interpolateColor(
@@ -53,6 +55,7 @@ export function Toggle({
       disabled={disabled}
       accessibilityRole="switch"
       accessibilityLabel={accessibilityLabel}
+      accessibilityState={{ checked: value }}
       scaleTo={0.98}
     >
       <Animated.View style={[styles.track, trackStyle]}>

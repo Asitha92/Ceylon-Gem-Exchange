@@ -41,7 +41,7 @@ export function SegmentedTabs<T extends string>({
   const fonts = useFontFamily()
 
   return (
-    <View style={[styles.tabsRow, style]}>
+    <View style={[styles.tabsRow, style]} accessibilityRole="tablist">
       {tabs.map((tab) => {
         const isActive = tab.value === value
         return (
@@ -50,6 +50,7 @@ export function SegmentedTabs<T extends string>({
             onPress={() => onChange(tab.value)}
             accessibilityRole="tab"
             accessibilityLabel={tab.label}
+            accessibilityState={{ selected: isActive }}
             style={styles.tabItem}
             scaleTo={0.98}
           >
@@ -98,7 +99,7 @@ export function BottomNavBar<T extends string>({
   const fonts = useFontFamily()
 
   return (
-    <GlassSurface clarity={35} radius={radii.lg} style={styles.navBar}>
+    <GlassSurface clarity={35} radius={radii.lg} accessibilityRole="tablist" style={styles.navBar}>
       {items.map((item) => {
         const isActive = item.value === value
         const color = isActive ? palette.accent : 'rgba(255,255,255,0.5)'
@@ -108,6 +109,7 @@ export function BottomNavBar<T extends string>({
             onPress={() => onChange(item.value)}
             accessibilityRole="tab"
             accessibilityLabel={item.label}
+            accessibilityState={{ selected: isActive }}
             style={styles.navItem}
           >
             {item.icon(isActive)}

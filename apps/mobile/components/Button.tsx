@@ -53,6 +53,7 @@ export function Button({
       onPress={onPress}
       disabled={isDisabled}
       accessibilityLabel={label}
+      accessibilityState={{ busy: loading }}
       style={style}
     >
       <LinearGradient
@@ -132,6 +133,10 @@ export function IconButton({
   style,
 }: IconButtonProps) {
   const palette = gemTones[tone]
+  // Only announce a selected state when `active` is meaningfully a toggle
+  // (e.g. a favorite heart) — most IconButton uses are plain one-shot
+  // actions (back, search) with no on/off state to report.
+  const toggleState = active === undefined ? undefined : { selected: active }
 
   if (active) {
     return (
@@ -139,6 +144,8 @@ export function IconButton({
         onPress={onPress}
         disabled={disabled}
         accessibilityLabel={accessibilityLabel}
+        accessibilityState={toggleState}
+        hitSlop={6}
         style={style}
       >
         <LinearGradient
@@ -156,6 +163,8 @@ export function IconButton({
       onPress={onPress}
       disabled={disabled}
       accessibilityLabel={accessibilityLabel}
+      accessibilityState={toggleState}
+      hitSlop={6}
       style={style}
     >
       <GlassSurface radius={radii.full} clarity={55} style={styles.iconCircle}>
@@ -192,7 +201,12 @@ export function SegmentedControl<T extends string>({
   const fonts = useFontFamily()
 
   return (
-    <GlassSurface radius={radii.full} clarity={45} style={[styles.segmentTrack, style]}>
+    <GlassSurface
+      radius={radii.full}
+      clarity={45}
+      accessibilityRole="tablist"
+      style={[styles.segmentTrack, style]}
+    >
       {options.map((option) => {
         const isActive = option.value === value
         return (
@@ -201,6 +215,7 @@ export function SegmentedControl<T extends string>({
             onPress={() => onChange(option.value)}
             accessibilityRole="tab"
             accessibilityLabel={option.label}
+            accessibilityState={{ selected: isActive }}
             style={styles.segmentItemWrapper}
           >
             {isActive ? (
@@ -258,6 +273,8 @@ export function Chip({ label, selected, onPress, tone = defaultGemTone, style }:
         onPress={onPress}
         accessibilityRole="checkbox"
         accessibilityLabel={label}
+        accessibilityState={{ checked: true }}
+        hitSlop={6}
         style={style}
       >
         <LinearGradient
@@ -277,6 +294,8 @@ export function Chip({ label, selected, onPress, tone = defaultGemTone, style }:
       onPress={onPress}
       accessibilityRole="checkbox"
       accessibilityLabel={label}
+      accessibilityState={{ checked: false }}
+      hitSlop={6}
       style={style}
     >
       <GlassSurface radius={radii.full} clarity={55} style={styles.chip}>
@@ -304,8 +323,8 @@ const styles = StyleSheet.create({
     fontSize: fontSize.base,
   },
   iconCircle: {
-    width: 44,
-    height: 44,
+    width: 48,
+    height: 48,
     alignItems: 'center',
     justifyContent: 'center',
   },

@@ -7,6 +7,13 @@ import { PressableScale } from './primitives/PressableScale'
 
 interface CardProps {
   onPress?: () => void
+  /**
+   * Required when `onPress` is set — `PressableScale` marks itself as a
+   * single accessibility element, which silences the individual text nodes
+   * inside `children` for screen readers, so the card's own label is the
+   * only thing that gets announced otherwise.
+   */
+  accessibilityLabel?: string
   clarity?: number
   style?: StyleProp<ViewStyle>
   children: ReactNode
@@ -15,10 +22,10 @@ interface CardProps {
 // Generic glass surface for grouped content — ad tiles, profile sections,
 // settings groups. Non-interactive unless `onPress` is given, in which case
 // it gets the shared press-scale feedback.
-export function Card({ onPress, clarity = 55, style, children }: CardProps) {
+export function Card({ onPress, accessibilityLabel, clarity = 55, style, children }: CardProps) {
   if (onPress) {
     return (
-      <PressableScale onPress={onPress}>
+      <PressableScale onPress={onPress} accessibilityLabel={accessibilityLabel}>
         <GlassSurface clarity={clarity} radius={radii.lg} style={[styles.card, style]}>
           {children}
         </GlassSurface>
@@ -66,7 +73,11 @@ export function ListRow({ title, subtitle, leading, trailing, onPress, style }: 
   if (!onPress) return content
 
   return (
-    <PressableScale onPress={onPress} accessibilityLabel={title} scaleTo={0.99}>
+    <PressableScale
+      onPress={onPress}
+      accessibilityLabel={subtitle ? `${title}, ${subtitle}` : title}
+      scaleTo={0.99}
+    >
       {content}
     </PressableScale>
   )

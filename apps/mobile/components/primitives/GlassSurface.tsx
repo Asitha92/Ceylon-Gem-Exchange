@@ -1,7 +1,13 @@
 import { neutral, radii } from '@ceylon-gems/ui-tokens'
 import { BlurView } from 'expo-blur'
 import { type ReactNode } from 'react'
-import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native'
+import {
+  StyleSheet,
+  View,
+  type AccessibilityRole,
+  type StyleProp,
+  type ViewStyle,
+} from 'react-native'
 
 interface GlassSurfaceProps {
   /**
@@ -18,6 +24,8 @@ interface GlassSurfaceProps {
   rim?: string
   /** Corner radius shared by the blur, tint, and border layers — pass a `radii` token, not the outer `style`. */
   radius?: number
+  /** e.g. "tablist" when this surface is the track for a SegmentedControl/SegmentedTabs group. */
+  accessibilityRole?: AccessibilityRole
   style?: StyleProp<ViewStyle>
   children?: ReactNode
 }
@@ -33,6 +41,7 @@ export function GlassSurface({
   clarity = 55,
   rim = neutral.glassRim,
   radius = radii.md,
+  accessibilityRole,
   style,
   children,
 }: GlassSurfaceProps) {
@@ -43,7 +52,10 @@ export function GlassSurface({
   const intensity = Math.round(20 + c * 60)
 
   return (
-    <View style={[styles.clip, { borderRadius: radius }, style]}>
+    <View
+      accessibilityRole={accessibilityRole}
+      style={[styles.clip, { borderRadius: radius }, style]}
+    >
       <BlurView intensity={intensity} tint="dark" style={StyleSheet.absoluteFill} />
       <View
         pointerEvents="none"

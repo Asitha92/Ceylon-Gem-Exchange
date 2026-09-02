@@ -15,22 +15,32 @@ import { GlassSurface } from './primitives/GlassSurface'
 interface BottomSheetProps {
   visible: boolean
   onClose: () => void
+  /** Screen-reader label for the dimmed backdrop's close tap target — pass a translated string; defaults to English. */
+  closeAccessibilityLabel?: string
   children: ReactNode
 }
 
 // The native Modal + slide animation drives the sheet motion (no custom
 // gesture-driven JS bottom sheet) — used for filter panels, share sheets,
 // location/language/currency pickers. Tapping the dimmed backdrop closes it.
-export function BottomSheet({ visible, onClose, children }: BottomSheetProps) {
+// `accessibilityViewIsModal` keeps VoiceOver from navigating into whatever
+// is behind the sheet while it's open (Android has no exact equivalent —
+// RN just ignores the prop there, which is a safe no-op).
+export function BottomSheet({
+  visible,
+  onClose,
+  closeAccessibilityLabel = 'Close',
+  children,
+}: BottomSheetProps) {
   return (
     <RNModal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
       <Pressable
         style={styles.backdrop}
         onPress={onClose}
-        accessibilityLabel="Close"
+        accessibilityLabel={closeAccessibilityLabel}
         accessibilityRole="button"
       />
-      <View style={styles.sheetWrap}>
+      <View style={styles.sheetWrap} accessibilityViewIsModal>
         <GlassSurface clarity={35} radius={radii.lg} style={styles.sheet}>
           <View style={styles.grabber} />
           {children}
@@ -68,7 +78,7 @@ export function ConfirmDialog({
 
   return (
     <RNModal visible={visible} transparent animationType="fade" onRequestClose={onCancel}>
-      <View style={styles.dialogBackdrop}>
+      <View style={styles.dialogBackdrop} accessibilityViewIsModal>
         <GlassSurface clarity={30} radius={radii.lg} style={styles.dialog}>
           <Text style={[styles.dialogTitle, { fontFamily: fonts.semibold }]}>{title}</Text>
           {message ? (

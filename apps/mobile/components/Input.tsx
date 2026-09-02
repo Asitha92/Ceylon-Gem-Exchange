@@ -1,6 +1,7 @@
 import { neutral, radii, spacing, fontSize } from '@ceylon-gems/ui-tokens'
 import { useRef, useState, type ReactNode } from 'react'
 import {
+  Pressable,
   StyleSheet,
   TextInput,
   View,
@@ -69,11 +70,21 @@ export function TextField({
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
           placeholderTextColor="rgba(255,255,255,0.4)"
+          accessibilityLabel={label}
+          accessibilityHint={error}
           style={[styles.input, { fontFamily: fonts.regular }, multiline && styles.inputMultiline]}
         />
         {rightIcon}
       </GlassSurface>
-      {error ? <Text style={[styles.error, { fontFamily: fonts.regular }]}>{error}</Text> : null}
+      {error ? (
+        <Text
+          style={[styles.error, { fontFamily: fonts.regular }]}
+          accessibilityRole="alert"
+          accessibilityLiveRegion="polite"
+        >
+          {error}
+        </Text>
+      ) : null}
     </View>
   )
 }
@@ -83,6 +94,8 @@ interface SearchBarProps {
   onChangeText: (text: string) => void
   onClear?: () => void
   placeholder?: string
+  /** Screen-reader label for the clear (✕) button — pass a translated string; defaults to English. */
+  clearAccessibilityLabel?: string
   leftIcon?: ReactNode
   style?: StyleProp<ViewStyle>
 }
@@ -93,6 +106,7 @@ export function SearchBar({
   onChangeText,
   onClear,
   placeholder,
+  clearAccessibilityLabel = 'Clear search',
   leftIcon,
   style,
 }: SearchBarProps) {
@@ -106,18 +120,19 @@ export function SearchBar({
         onChangeText={onChangeText}
         placeholder={placeholder}
         placeholderTextColor="rgba(255,255,255,0.4)"
+        accessibilityLabel={placeholder}
         style={[styles.input, { fontFamily: fonts.regular }]}
         returnKeyType="search"
       />
       {value.length > 0 && onClear ? (
-        <Text
+        <Pressable
           onPress={onClear}
-          style={styles.searchClear}
+          hitSlop={10}
           accessibilityRole="button"
-          accessibilityLabel="Clear search"
+          accessibilityLabel={clearAccessibilityLabel}
         >
-          ✕
-        </Text>
+          <Text style={styles.searchClear}>✕</Text>
+        </Pressable>
       ) : null}
     </GlassSurface>
   )
@@ -168,6 +183,7 @@ export function OtpInput({ length = 6, value, onChangeText, autoFocus }: OtpInpu
             keyboardType="number-pad"
             maxLength={1}
             autoFocus={Boolean(autoFocus) && index === 0}
+            accessibilityLabel={`Digit ${index + 1} of ${length}`}
             style={[styles.otpDigit, { fontFamily: fonts.semibold }]}
             textAlign="center"
           />
