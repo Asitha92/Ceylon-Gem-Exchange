@@ -91,18 +91,23 @@ Mobile app  --Bearer <JWT>-->  ClerkAuthGuard  --request.auth populated-->  [Rol
 ### 4. Locale sync
 
 ```
-App signs in  --detect device locale-->  PATCH /me { locale }  --upsert-->  users.locale
+LocaleProvider resolves locale  --isSignedIn && isReady-->  PATCH /me { locale }  --upsert-->  users.locale
 ```
 
-- `useSyncDeviceLocale()` (`apps/mobile/hooks/useSyncDeviceLocale.ts`) reads
-  the device's language via `expo-localization` once per sign-in, normalizes
-  it to our supported set (`en`/`si`/`ta`, falling back to `en`), and PATCHes
-  it to the API.
+- `LocaleProvider` (`apps/mobile/providers/LocaleProvider.tsx`) is the single
+  source of truth for the app's active language (`en`/`si` — Tamil is a
+  deliberately deferred product decision, not built yet). It persists an
+  explicit user choice via `expo-secure-store`, falling back to the device
+  locale (`expo-localization`, via `apps/mobile/lib/locale.ts`) only when
+  nothing's been stored yet.
+- `useSyncDeviceLocale()` (`apps/mobile/hooks/useSyncDeviceLocale.ts`,
+  despite the now slightly stale name) pushes whatever `LocaleProvider`
+  resolves to the backend whenever it changes and the user is signed in — it
+  no longer re-detects the device locale itself, so it can't clobber an
+  explicit switch made in the app's language settings screen
+  (`apps/mobile/app/locale-settings.tsx`).
 - `PATCH /me` upserts rather than assuming the webhook already created the
   row — it can legitimately run before the webhook has fired.
-- This is a **default only**. The real trilingual language switcher (E0.3)
-  and its explicit user choice should win over this on every later sync —
-  don't let this logic silently overwrite a choice the user actually made.
 
 ## Environment variables
 
@@ -129,9 +134,6 @@ template.
   through the app.
 - **No soft-delete policy on `user.deleted`.** The row is hard-deleted.
   Revisit once other tables have foreign keys into `users.id`.
-- **Locale detection can't be proven against a real device from this repo's
-  automated checks** — verified via typecheck, lint, and a real `expo
-export`, not a live device run.
 
 ## Local testing runbook
 

@@ -12,7 +12,7 @@ apps/
 packages/
   ui-tokens/    Shared design tokens (color, type, spacing)
   api-client/   Typed API client generated from the NestJS OpenAPI spec
-  i18n/         Shared EN / SI / TA translation dictionaries
+  i18n/         Shared EN / SI translation dictionaries (Tamil deferred)
   config/       Shared config (eslint, tsconfig, etc.)
 ```
 
@@ -36,3 +36,5 @@ the mobile app and backend work end-to-end.
 ## Docs
 
 - [Authentication](docs/authentication.md) — Clerk + our `users` table: sign-in, webhook sync, API auth guards, locale detection
+- [Design tokens](docs/design-tokens.md) — gem-tone color palettes, typography, spacing, radii (`packages/ui-tokens`)
+- [Component kit](docs/component-kit.md) — the mobile app's shared UI components (`apps/mobile/components`)
