@@ -1,4 +1,5 @@
 import { Show, useUser } from '@clerk/expo'
+import { colorsLight, fontSize, spacing } from '@ceylon-gems/ui-tokens'
 import { StyleSheet, Text, View } from 'react-native'
 
 export default function Home() {
@@ -23,15 +24,15 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8,
-    backgroundColor: '#faf9f7',
+    gap: spacing.sm,
+    backgroundColor: colorsLight.background,
   },
   title: {
-    fontSize: 28,
+    fontSize: fontSize['2xl'],
     fontWeight: '600',
-    color: '#1b1c20',
+    color: colorsLight.ink,
   },
   subtitle: {
-    color: '#6b665a',
+    color: colorsLight.inkMuted,
   },
 })

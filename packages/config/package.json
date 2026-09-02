@@ -6,6 +6,7 @@
   "exports": {
     "./typescript/base.json": "./typescript/base.json",
     "./typescript/node.json": "./typescript/node.json",
+    "./typescript/bundler.json": "./typescript/bundler.json",
     "./typescript/react-native.json": "./typescript/react-native.json",
     "./eslint/base.js": "./eslint/base.js",
     "./eslint/react-native.js": "./eslint/react-native.js"
