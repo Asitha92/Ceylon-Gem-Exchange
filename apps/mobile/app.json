@@ -21,7 +21,24 @@
       "expo-secure-store",
       "expo-web-browser",
       "@clerk/expo",
-      "expo-localization"
+      "expo-localization",
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "node_modules/@expo-google-fonts/jost/400Regular/Jost_400Regular.ttf",
+            "node_modules/@expo-google-fonts/jost/500Medium/Jost_500Medium.ttf",
+            "node_modules/@expo-google-fonts/jost/600SemiBold/Jost_600SemiBold.ttf",
+            "node_modules/@expo-google-fonts/jost/700Bold/Jost_700Bold.ttf",
+            "node_modules/@expo-google-fonts/jost/800ExtraBold/Jost_800ExtraBold.ttf",
+            "node_modules/@expo-google-fonts/noto-sans-sinhala/400Regular/NotoSansSinhala_400Regular.ttf",
+            "node_modules/@expo-google-fonts/noto-sans-sinhala/500Medium/NotoSansSinhala_500Medium.ttf",
+            "node_modules/@expo-google-fonts/noto-sans-sinhala/600SemiBold/NotoSansSinhala_600SemiBold.ttf",
+            "node_modules/@expo-google-fonts/noto-sans-sinhala/700Bold/NotoSansSinhala_700Bold.ttf",
+            "node_modules/@expo-google-fonts/noto-sans-sinhala/800ExtraBold/NotoSansSinhala_800ExtraBold.ttf"
+          ]
+        }
+      ]
     ]
   }
 }

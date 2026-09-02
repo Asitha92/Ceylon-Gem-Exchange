@@ -1,50 +1,38 @@
-// Family names match what task 2 (font embedding via the expo-font config
-// plugin) registers them as. Display faces carry the brand's serif
-// character; UI faces stay legible at small sizes. Sinhala/Tamil get their
-// own serif display face per the functional spec's UC-2 note ("serif
-// Sinhala/Tamil display fonts preserve elegance").
+// Source of truth: the "Ceylon Gem Exchange Signup" Claude Design mockup.
+// Its CSS names 'Brandon Text','Brandon Grotesque','Jost' in that order, but
+// Brandon Text/Grotesque (HVD Fonts, commercial) are never actually loaded —
+// only Jost is pulled in via a Google Fonts <link>, so Jost is what genuinely
+// renders. One family covers both display and UI, differentiated by weight,
+// not by swapping typefaces the way the old Cormorant Garamond system did.
+//
+// Font family names match what @expo-google-fonts packages name their
+// per-weight files (each weight is technically its own family internally,
+// e.g. "Jost_600SemiBold") — that's also what expo-font's config plugin
+// registers them as when embedded via raw file paths in app.json.
+//
+// Tamil is intentionally not wired up yet — only English and Sinhala are
+// supported at the moment, per product decision. Add a `ta` entry here (and
+// load its font family) when that work starts; don't add a placeholder that
+// silently falls back to English in the meantime.
 
 export const fontFamilies = {
-  display: {
-    en: {
-      regular: 'CormorantGaramond-Medium',
-      semibold: 'CormorantGaramond-SemiBold',
-      bold: 'CormorantGaramond-Bold',
-    },
-    si: {
-      regular: 'NotoSerifSinhala-Medium',
-      semibold: 'NotoSerifSinhala-SemiBold',
-      bold: 'NotoSerifSinhala-Bold',
-    },
-    ta: {
-      regular: 'NotoSerifTamil-Medium',
-      semibold: 'NotoSerifTamil-SemiBold',
-      bold: 'NotoSerifTamil-Bold',
-    },
+  en: {
+    regular: 'Jost_400Regular',
+    medium: 'Jost_500Medium',
+    semibold: 'Jost_600SemiBold',
+    bold: 'Jost_700Bold',
+    extrabold: 'Jost_800ExtraBold',
   },
-  ui: {
-    en: {
-      regular: 'AlbertSans-Regular',
-      medium: 'AlbertSans-Medium',
-      semibold: 'AlbertSans-SemiBold',
-      bold: 'AlbertSans-Bold',
-    },
-    si: {
-      regular: 'NotoSansSinhala-Regular',
-      medium: 'NotoSansSinhala-Medium',
-      semibold: 'NotoSansSinhala-SemiBold',
-      bold: 'NotoSansSinhala-Bold',
-    },
-    ta: {
-      regular: 'NotoSansTamil-Regular',
-      medium: 'NotoSansTamil-Medium',
-      semibold: 'NotoSansTamil-SemiBold',
-      bold: 'NotoSansTamil-Bold',
-    },
+  si: {
+    regular: 'NotoSansSinhala_400Regular',
+    medium: 'NotoSansSinhala_500Medium',
+    semibold: 'NotoSansSinhala_600SemiBold',
+    bold: 'NotoSansSinhala_700Bold',
+    extrabold: 'NotoSansSinhala_800ExtraBold',
   },
 } as const
 
-export type AppLocale = 'en' | 'si' | 'ta'
+export type SupportedLocale = keyof typeof fontFamilies
 
 // A modest scale for mobile — not a generic default, sized for a listing
 // marketplace where prices, titles, and captions need clear rhythm without

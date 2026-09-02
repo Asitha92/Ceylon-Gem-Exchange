@@ -1,5 +1,5 @@
 import { Show, useUser } from '@clerk/expo'
-import { colorsLight, fontSize, spacing } from '@ceylon-gems/ui-tokens'
+import { colorsLight, fontFamilies, fontSize, spacing } from '@ceylon-gems/ui-tokens'
 import { StyleSheet, Text, View } from 'react-native'
 
 export default function Home() {
@@ -29,10 +29,11 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: fontSize['2xl'],
-    fontWeight: '600',
+    fontFamily: fontFamilies.en.semibold,
     color: colorsLight.ink,
   },
   subtitle: {
+    fontFamily: fontFamilies.en.regular,
     color: colorsLight.inkMuted,
   },
 })
