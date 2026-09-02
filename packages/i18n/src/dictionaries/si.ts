@@ -39,15 +39,18 @@ export const si: Dictionary = {
       title: 'ඔබේ ගිණුම සාදන්න',
       subtitle: 'ශ්‍රී ලංකාවේ විශ්වාසනීය මැණික් වෙළඳපොළට එකතු වන්න',
       nameLabel: 'සම්පූර්ණ නම',
-      namePlaceholder: 'ඔබේ නම',
-      emailLabel: 'විද්‍යුත් තැපෑල',
-      emailPlaceholder: 'you@example.com',
+      namePlaceholder: 'නිමල් පෙරේරා',
+      mobileLabel: 'දුරකථන අංකය',
+      emailLabel: 'විද්‍යුත් තැපෑල (විකල්පයි)',
+      emailPlaceholder: 'you@gemhouse.lk',
       passwordLabel: 'මුරපදය',
-      passwordPlaceholder: 'මුරපදයක් සාදන්න',
+      passwordPlaceholder: 'අකුරු 8+',
       submit: 'ගිණුම සාදන්න',
       hasAccount: 'දැනටමත් ගිණුමක් තිබේද?',
       signInLink: 'ඇතුල් වන්න',
       termsNotice: 'ඉදිරියට යාමෙන්, ඔබ අපගේ නියම සහ පෞද්ගලිකත්ව ප්‍රතිපත්තියට එකඟ වේ.',
+      termsAgreement: 'මම {{tradingTerms}} සහ NGJA සහතික පරීක්ෂාවන්ට එකඟ වෙමි.',
+      tradingTerms: 'වෙළඳ නියම',
     },
     forgotPassword: {
       title: 'මුරපදය අමතකද?',
@@ -199,6 +202,10 @@ export const si: Dictionary = {
     message:
       'දැන්වීම් සුරැකීමට, විකුණුම්කරුවන් සමඟ කතා කිරීමට සහ ඔබේම දැන්වීම් පළ කිරීමට ලියාපදිංචි වන්න.',
     signUpButton: 'ලියාපදිංචි වන්න',
+  },
+  countryPicker: {
+    title: 'රට තෝරන්න',
+    searchPlaceholder: 'රට හෝ කේතය සොයන්න',
   },
   localeSettings: {
     title: 'ස්ථානය, භාෂාව සහ මුදල් ඒකකය',

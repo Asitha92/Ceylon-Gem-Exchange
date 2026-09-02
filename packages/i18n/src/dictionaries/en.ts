@@ -48,6 +48,7 @@ export interface Dictionary {
       subtitle: string
       nameLabel: string
       namePlaceholder: string
+      mobileLabel: string
       emailLabel: string
       emailPlaceholder: string
       passwordLabel: string
@@ -56,6 +57,9 @@ export interface Dictionary {
       hasAccount: string
       signInLink: string
       termsNotice: string
+      /** Contains a literal `{{tradingTerms}}` marker — split on it to render `tradingTerms` as a separately styled inline span. */
+      termsAgreement: string
+      tradingTerms: string
     }
     forgotPassword: {
       title: string
@@ -207,6 +211,10 @@ export interface Dictionary {
     message: string
     signUpButton: string
   }
+  countryPicker: {
+    title: string
+    searchPlaceholder: string
+  }
   localeSettings: {
     title: string
     language: string
@@ -248,15 +256,18 @@ export const en: Dictionary = {
       title: 'Create your account',
       subtitle: 'Join Sri Lanka’s trusted gem marketplace',
       nameLabel: 'Full name',
-      namePlaceholder: 'Your name',
-      emailLabel: 'Email',
-      emailPlaceholder: 'you@example.com',
+      namePlaceholder: 'Nimal Perera',
+      mobileLabel: 'Mobile number',
+      emailLabel: 'Email address (optional)',
+      emailPlaceholder: 'you@gemhouse.lk',
       passwordLabel: 'Password',
-      passwordPlaceholder: 'Create a password',
+      passwordPlaceholder: '8+ characters',
       submit: 'Create account',
       hasAccount: 'Already have an account?',
       signInLink: 'Sign in',
       termsNotice: 'By continuing, you agree to our Terms and Privacy Policy.',
+      termsAgreement: 'I agree to the {{tradingTerms}} and NGJA certification checks.',
+      tradingTerms: 'Trading Terms',
     },
     forgotPassword: {
       title: 'Forgot password?',
@@ -407,6 +418,10 @@ export const en: Dictionary = {
     title: 'Create an account to continue',
     message: 'Sign up to save listings, message sellers, and post your own ads.',
     signUpButton: 'Sign up',
+  },
+  countryPicker: {
+    title: 'Select country',
+    searchPlaceholder: 'Search country or code',
   },
   localeSettings: {
     title: 'Location, language & currency',

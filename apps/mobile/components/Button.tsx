@@ -23,6 +23,8 @@ interface ButtonProps {
   /** Uses the semantic danger gradient instead of the gem tone — delete/remove actions. */
   danger?: boolean
   icon?: ReactNode
+  /** Which side `icon` renders on. Default 'left'; a forward-progress CTA (e.g. "Continue" + arrow) wants 'right'. */
+  iconPosition?: 'left' | 'right'
   style?: StyleProp<ViewStyle>
 }
 
@@ -38,6 +40,7 @@ export function Button({
   tone = defaultGemTone,
   danger,
   icon,
+  iconPosition = 'left',
   style,
 }: ButtonProps) {
   const palette = gemTones[tone]
@@ -71,13 +74,14 @@ export function Button({
           }),
         ]}
       >
-        {icon}
+        {iconPosition === 'left' ? icon : null}
         <Text
           style={[styles.label, { fontFamily: fonts.semibold, color: neutral.white }]}
           numberOfLines={1}
         >
           {loading ? '…' : label}
         </Text>
+        {iconPosition === 'right' ? icon : null}
       </LinearGradient>
     </PressableScale>
   )

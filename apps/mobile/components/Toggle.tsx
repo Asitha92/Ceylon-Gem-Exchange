@@ -1,6 +1,7 @@
-import { defaultGemTone, gemTones, type GemTone } from '@ceylon-gems/ui-tokens'
-import { useEffect } from 'react'
-import { StyleSheet } from 'react-native'
+import { defaultGemTone, gemTones, radii, spacing, type GemTone } from '@ceylon-gems/ui-tokens'
+import { LinearGradient } from 'expo-linear-gradient'
+import { useEffect, type ReactNode } from 'react'
+import { StyleSheet, Text, View, type StyleProp, type ViewStyle } from 'react-native'
 import Animated, {
   interpolateColor,
   useAnimatedStyle,
@@ -65,6 +66,62 @@ export function Toggle({
   )
 }
 
+interface CheckboxProps {
+  checked: boolean
+  onValueChange: (value: boolean) => void
+  disabled?: boolean
+  tone?: GemTone
+  /**
+   * Full spoken content, e.g. "I agree to the Trading Terms and NGJA
+   * certification checks" — PressableScale's wrapper silences the rich
+   * `children` text for screen readers, so this needs to say the whole
+   * thing, not just a short name.
+   */
+  accessibilityLabel: string
+  /** The visible label — can include an inline styled span (e.g. a bold "Trading Terms"). Tapping anywhere in the row toggles the checkbox, matching the design; there's no separate terms link target yet. */
+  children: ReactNode
+  style?: StyleProp<ViewStyle>
+}
+
+// Checkbox + inline label row (Signup's terms agreement). Unlike Toggle,
+// there's no continuous animation to speak of — just a static gradient
+// fill flip, so no reduced-motion handling is needed here.
+export function Checkbox({
+  checked,
+  onValueChange,
+  disabled,
+  tone = defaultGemTone,
+  accessibilityLabel,
+  children,
+  style,
+}: CheckboxProps) {
+  const palette = gemTones[tone]
+
+  return (
+    <PressableScale
+      onPress={() => onValueChange(!checked)}
+      disabled={disabled}
+      accessibilityRole="checkbox"
+      accessibilityLabel={accessibilityLabel}
+      accessibilityState={{ checked }}
+      scaleTo={0.98}
+      style={[styles.checkboxRow, style]}
+    >
+      {checked ? (
+        <LinearGradient
+          colors={[`${palette.cta[0]}0.95)`, `${palette.cta[1]}0.8)`]}
+          style={styles.checkboxBox}
+        >
+          <Text style={[styles.checkboxTick, { color: palette.tickInk }]}>✓</Text>
+        </LinearGradient>
+      ) : (
+        <View style={styles.checkboxBoxEmpty} />
+      )}
+      {children}
+    </PressableScale>
+  )
+}
+
 const styles = StyleSheet.create({
   track: {
     width: 48,
@@ -78,5 +135,29 @@ const styles = StyleSheet.create({
     height: 24,
     borderRadius: 12,
     backgroundColor: '#ffffff',
+  },
+  checkboxRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: spacing.sm,
+  },
+  checkboxBox: {
+    width: 20,
+    height: 20,
+    borderRadius: radii.sm,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  checkboxBoxEmpty: {
+    width: 20,
+    height: 20,
+    borderRadius: radii.sm,
+    backgroundColor: 'rgba(255,255,255,0.07)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.22)',
+  },
+  checkboxTick: {
+    fontSize: 12,
+    fontWeight: '700',
   },
 })

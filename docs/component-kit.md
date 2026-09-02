@@ -15,9 +15,11 @@ Every component reads color from `@ceylon-gems/ui-tokens`
 import { Button, Card, ListRow /* ... */ } from '../components'
 ```
 
-## The two primitives
+## The three primitives
 
-Everything else in the kit is built on these.
+Everything else in the kit is built on the first two; the third
+(`LiveGradientBackground`) is a screen-level primitive rather than something
+other components compose with directly.
 
 ### `PressableScale`
 
@@ -85,15 +87,43 @@ Always set corner rounding via the `radius` prop, not the outer `style` —
 the blur and tint layers need the same radius to clip correctly, and `style`
 alone only rounds the outer container.
 
+### `LiveGradientBackground`
+
+The animated screen-level background every real screen sits on (`app/
+sign-up.tsx` is the first) — a 3-stop base gradient (`tone.screen`) plus
+three soft SVG radial-gradient blobs (`tone.glow`) drifting slowly via
+Reanimated-driven transforms, topped with the standard dark overlay
+gradient. Approximates the Claude Design mockups' animated WebGL
+simplex-noise shader background rather than porting it — a true port needs
+`react-native-skia`'s SkSL runtime effects, which requires leaving Expo Go
+for a custom dev client, a trade-off explicitly declined. Grain isn't
+reproduced at all (no noise texture asset, and `react-native-svg`'s
+`feTurbulence` support isn't reliable cross-platform) — only the
+moving-gradient half of "living gradient" is real.
+
+```ts
+interface LiveGradientBackgroundProps {
+  tone?: GemTone // default the app's defaultGemTone
+  children?: ReactNode
+  style?: StyleProp<ViewStyle>
+}
+```
+
+```tsx
+<LiveGradientBackground>
+  <SafeAreaView style={{ flex: 1 }}>{/* screen content */}</SafeAreaView>
+</LiveGradientBackground>
+```
+
 ## Buttons (`Button.tsx`)
 
-| Component          | Purpose                                                                                                                                                                                                                                                                                                                                         |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Button`           | Primary CTA — full-width gradient pill (Sign in, Post ad, Save changes). Colored glow shadow on iOS only (Android's `elevation` has no color channel — a real platform limitation, not an oversight). `danger` swaps the tone gradient for the semantic danger one (delete/remove actions).                                                     |
-| `GhostButton`      | Secondary action — flat glass fill, no gradient (Cancel, Not now).                                                                                                                                                                                                                                                                              |
-| `IconButton`       | Circular glass button for icon-only actions, 48×48pt + 6pt hitSlop. `active` swaps the flat glass fill for the tone's CTA gradient (a filled/favorited state) and reports `accessibilityState.selected` — only when `active` is explicitly passed, since most `IconButton`s are one-shot actions (back, search) with no on/off state to report. |
-| `SegmentedControl` | Pill-track multi-way value picker (Buy/Rent, currency). Wrapping surface is `accessibilityRole="tablist"`; each segment is `"tab"` with `accessibilityState.selected`.                                                                                                                                                                          |
-| `Chip`             | Small selectable pill for filters/tags. `accessibilityRole="checkbox"` + `accessibilityState.checked`; 6pt hitSlop since its visual size is deliberately small.                                                                                                                                                                                 |
+| Component          | Purpose                                                                                                                                                                                                                                                                                                                                                                                                              |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Button`           | Primary CTA — full-width gradient pill (Sign in, Post ad, Save changes). Colored glow shadow on iOS only (Android's `elevation` has no color channel — a real platform limitation, not an oversight). `danger` swaps the tone gradient for the semantic danger one (delete/remove actions). `icon` defaults to the left; pass `iconPosition="right"` for a forward-progress CTA (e.g. Sign Up's "Create account →"). |
+| `GhostButton`      | Secondary action — flat glass fill, no gradient (Cancel, Not now).                                                                                                                                                                                                                                                                                                                                                   |
+| `IconButton`       | Circular glass button for icon-only actions, 48×48pt + 6pt hitSlop. `active` swaps the flat glass fill for the tone's CTA gradient (a filled/favorited state) and reports `accessibilityState.selected` — only when `active` is explicitly passed, since most `IconButton`s are one-shot actions (back, search) with no on/off state to report.                                                                      |
+| `SegmentedControl` | Pill-track multi-way value picker (Buy/Rent, currency). Wrapping surface is `accessibilityRole="tablist"`; each segment is `"tab"` with `accessibilityState.selected`.                                                                                                                                                                                                                                               |
+| `Chip`             | Small selectable pill for filters/tags. `accessibilityRole="checkbox"` + `accessibilityState.checked`; 6pt hitSlop since its visual size is deliberately small.                                                                                                                                                                                                                                                      |
 
 ```tsx
 <Button label={t.common.continue} onPress={submit} />
@@ -108,16 +138,26 @@ alone only rounds the outer container.
 
 ## Inputs (`Input.tsx`)
 
-| Component   | Purpose                                                                                                                                                                                                                                                                                                                                                                                            |
-| ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `TextField` | Glass text field used across every form (email, password, ad title/description). Focus and error both shift the border color, never layout, so the field doesn't jump. `label` and `error` are associated with the underlying `TextInput` via `accessibilityLabel`/`accessibilityHint`; the error text itself is `accessibilityRole="alert"` with a live region so it's announced when it appears. |
-| `SearchBar` | Full-pill search field (Home header, Saved Searches). The clear (✕) button's screen-reader label is a prop (`clearAccessibilityLabel`, English default) — pass the translated string from a screen rather than relying on the default.                                                                                                                                                             |
-| `OtpInput`  | One glass cell per digit (phone/email verification). Value lives in the parent as a single string; manages per-cell focus and backspace-to-previous-cell internally. Each cell is labeled `"Digit N of length"` for screen readers.                                                                                                                                                                |
+| Component    | Purpose                                                                                                                                                                                                                                                                                                                                                                                            |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `TextField`  | Glass text field used across every form (email, password, ad title/description). Focus and error both shift the border color, never layout, so the field doesn't jump. `label` and `error` are associated with the underlying `TextInput` via `accessibilityLabel`/`accessibilityHint`; the error text itself is `accessibilityRole="alert"` with a live region so it's announced when it appears. |
+| `SearchBar`  | Full-pill search field (Home header, Saved Searches). The clear (✕) button's screen-reader label is a prop (`clearAccessibilityLabel`, English default) — pass the translated string from a screen rather than relying on the default.                                                                                                                                                             |
+| `OtpInput`   | One glass cell per digit (phone/email verification). Value lives in the parent as a single string; manages per-cell focus and backspace-to-previous-cell internally. Each cell is labeled `"Digit N of length"` for screen readers.                                                                                                                                                                |
+| `PhoneField` | Mobile-number field with a pressable country-dial-code prefix (Signup, and anywhere phone is the primary identifier). Only reports the press — the screen owns opening its own country-picker `BottomSheet` (see the Sign Up screen for the pattern: a `ListRow`-based list with a flag `leading`, dial-code + checkmark `trailing`).                                                              |
 
 ```tsx
 <TextField label={t.auth.signIn.emailLabel} placeholder="you@example.com" value={email} onChangeText={setEmail} error={emailError} />
 <SearchBar value={query} onChangeText={setQuery} onClear={() => setQuery('')} placeholder={t.home.searchPlaceholder} clearAccessibilityLabel="Clear search" />
 <OtpInput length={6} value={code} onChangeText={setCode} autoFocus />
+<PhoneField
+  label={t.auth.signUp.mobileLabel}
+  countryFlag={country.flag}
+  countryDial={country.dial}
+  onPressCountry={() => setPickerOpen(true)}
+  value={mobile}
+  onChangeText={setMobile}
+  placeholder={country.hint}
+/>
 ```
 
 ## `Toggle`
@@ -134,6 +174,28 @@ blur would be imperceptible and not worth a second `BlurView` per row.
   onValueChange={setNotificationsEnabled}
   accessibilityLabel={t.accountSettings.notifications}
 />
+```
+
+### `Checkbox`
+
+Checkbox + inline label row (Signup's terms agreement) — same file as
+`Toggle`. Tapping anywhere in the row toggles it, matching the design;
+there's no separate tap target for an inline link inside the label.
+`children` can include a differently-styled inline span (e.g. a bold
+"Trading Terms"), but since `PressableScale`'s wrapper silences rich child
+text for screen readers, `accessibilityLabel` must be the **full** spoken
+sentence, not just a short name.
+
+```tsx
+<Checkbox
+  checked={agreed}
+  onValueChange={setAgreed}
+  accessibilityLabel="I agree to the Trading Terms and NGJA certification checks."
+>
+  <Text>
+    I agree to the <Text style={styles.link}>Trading Terms</Text> and NGJA certification checks.
+  </Text>
+</Checkbox>
 ```
 
 ## Cards (`Card.tsx`)
@@ -232,3 +294,5 @@ common case where a `ListRow`'s own title already identifies the person.
 - **No exhaustive contrast audit.** See [design tokens](./design-tokens.md#known-limitation) — glass surfaces' real contrast depends on whatever renders behind them.
 - **Verified on iOS Simulator only**, via `expo start --ios` + screenshots, not a physical device or Android emulator. `expo start` also rewrites `apps/mobile/tsconfig.json` and deletes `apps/mobile/expo-env.d.ts` as a side effect of regenerating typed routes — `git checkout` those two files after any verification run, before committing.
 - **VoiceOver/TalkBack walkthroughs weren't performed end-to-end** — the accessibility work (roles, states, labels, reduced motion, hit targets) is verified by code review and a visual on-device check, not a recorded screen-reader pass.
+- **`LiveGradientBackground` doesn't reproduce film grain** — see its own section above. Only the moving-gradient half of the original design's "living gradient" is real.
+- **`app/verify-phone.tsx` has no design yet** — built with the existing kit to stay visually consistent, but should be replaced once a real design for it exists (see `docs/authentication.md`'s Sign-up flow section).

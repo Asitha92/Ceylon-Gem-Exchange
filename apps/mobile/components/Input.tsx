@@ -89,6 +89,84 @@ export function TextField({
   )
 }
 
+interface PhoneFieldProps {
+  label?: string
+  error?: string
+  countryFlag: string
+  countryDial: string
+  onPressCountry: () => void
+  value: string
+  onChangeText: (text: string) => void
+  placeholder?: string
+  style?: StyleProp<ViewStyle>
+}
+
+// Mobile-number field with a pressable country-dial-code prefix (Signup,
+// Login — anywhere phone is the primary identifier). The dial-code trigger
+// just reports a press; the screen owns opening its own country-picker
+// BottomSheet rather than this component owning that state.
+export function PhoneField({
+  label,
+  error,
+  countryFlag,
+  countryDial,
+  onPressCountry,
+  value,
+  onChangeText,
+  placeholder,
+  style,
+}: PhoneFieldProps) {
+  const [focused, setFocused] = useState(false)
+  const fonts = useFontFamily()
+
+  const rim = error ? '255,140,125' : neutral.glassRim
+  const borderOverride = error
+    ? { borderColor: neutral.danger.border }
+    : focused
+      ? { borderColor: 'rgba(255,255,255,0.4)' }
+      : null
+
+  return (
+    <View style={style}>
+      {label ? <Text style={[styles.label, { fontFamily: fonts.medium }]}>{label}</Text> : null}
+      <GlassSurface rim={rim} clarity={50} style={[styles.fieldSurface, borderOverride]}>
+        <Pressable
+          onPress={onPressCountry}
+          hitSlop={6}
+          style={styles.dialTrigger}
+          accessibilityRole="button"
+          accessibilityLabel={`Country code, ${countryDial}`}
+        >
+          <Text style={styles.dialFlag}>{countryFlag}</Text>
+          <Text style={[styles.dialText, { fontFamily: fonts.semibold }]}>{countryDial}</Text>
+          <Text style={styles.dialChevron}>▾</Text>
+        </Pressable>
+        <TextInput
+          value={value}
+          onChangeText={onChangeText}
+          placeholder={placeholder}
+          placeholderTextColor="rgba(255,255,255,0.4)"
+          keyboardType="phone-pad"
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+          accessibilityLabel={label}
+          accessibilityHint={error}
+          style={[styles.input, { fontFamily: fonts.regular }]}
+        />
+      </GlassSurface>
+      {error ? (
+        <Text
+          style={[styles.error, { fontFamily: fonts.regular }]}
+          accessibilityRole="alert"
+          accessibilityLiveRegion="polite"
+        >
+          {error}
+        </Text>
+      ) : null}
+    </View>
+  )
+}
+
 interface SearchBarProps {
   value: string
   onChangeText: (text: string) => void
@@ -225,6 +303,25 @@ const styles = StyleSheet.create({
     fontSize: fontSize.xs,
     color: neutral.danger.text,
     marginTop: spacing.xs,
+  },
+  dialTrigger: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingRight: spacing.sm,
+    borderRightWidth: 1,
+    borderRightColor: 'rgba(255,255,255,0.16)',
+  },
+  dialFlag: {
+    fontSize: fontSize.base,
+  },
+  dialText: {
+    fontSize: fontSize.sm,
+    color: 'rgba(255,255,255,0.85)',
+  },
+  dialChevron: {
+    fontSize: fontSize.xs,
+    color: 'rgba(255,255,255,0.6)',
   },
   searchSurface: {
     flexDirection: 'row',

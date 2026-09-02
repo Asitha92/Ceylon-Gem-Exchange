@@ -1,4 +1,5 @@
 export * from './primitives/GlassSurface'
+export * from './primitives/LiveGradientBackground'
 export * from './primitives/PressableScale'
 export * from './Avatar'
 export * from './Badge'
