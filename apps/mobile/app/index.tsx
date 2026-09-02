@@ -1,16 +1,13 @@
-import { SignedIn, SignedOut, useUser } from '@clerk/clerk-expo'
+import { Show, useUser } from '@clerk/expo'
 import { StyleSheet, Text, View } from 'react-native'
 
 export default function Home() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Ceylon Gems</Text>
-      <SignedOut>
-        <Text style={styles.subtitle}>Not signed in.</Text>
-      </SignedOut>
-      <SignedIn>
+      <Show when="signed-in" fallback={<Text style={styles.subtitle}>Not signed in.</Text>}>
         <SignedInGreeting />
-      </SignedIn>
+      </Show>
     </View>
   )
 }

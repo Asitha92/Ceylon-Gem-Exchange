@@ -11,7 +11,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@clerk/clerk-expo": "2.20.0",
+    "@clerk/expo": "4.6.2",
     "expo": "57.0.18",
     "expo-constants": "~57.0.16",
     "expo-linking": "~57.0.8",
@@ -21,7 +21,6 @@
     "expo-status-bar": "~57.0.1",
     "expo-web-browser": "~57.0.2",
     "react": "19.2.3",
-    "react-dom": "19.2.3",
     "react-native": "0.86.3",
     "react-native-safe-area-context": "~5.7.0",
     "react-native-screens": "~4.26.0"
