@@ -8,18 +8,14 @@ import {
   useState,
   type ReactNode,
 } from 'react'
-import {
-  detectDeviceLocale,
-  defaultLocale,
-  isSupportedLocale,
-  type SupportedLocale,
-} from '../lib/locale'
+import { defaultLocale, isSupportedLocale, type Locale } from '@ceylon-gems/i18n'
+import { detectDeviceLocale } from '../lib/locale'
 
 const STORAGE_KEY = 'locale-preference'
 
 interface LocaleContextValue {
-  locale: SupportedLocale
-  setLocale: (locale: SupportedLocale) => void
+  locale: Locale
+  setLocale: (locale: Locale) => void
   /** True until the stored preference (or the device fallback) has been read once. */
   isReady: boolean
 }
@@ -31,7 +27,7 @@ const LocaleContext = createContext<LocaleContextValue | null>(null)
 // AsyncStorage for one small string — it's already a direct dependency
 // (Clerk's token cache) and comfortably handles a value this size.
 export function LocaleProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<SupportedLocale>(defaultLocale)
+  const [locale, setLocaleState] = useState<Locale>(defaultLocale)
   const [isReady, setIsReady] = useState(false)
 
   useEffect(() => {
@@ -51,7 +47,7 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
     }
   }, [])
 
-  const setLocale = useCallback((next: SupportedLocale) => {
+  const setLocale = useCallback((next: Locale) => {
     setLocaleState(next)
     void SecureStore.setItemAsync(STORAGE_KEY, next)
   }, [])

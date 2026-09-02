@@ -28,6 +28,7 @@ import {
   TextField,
   Toggle,
 } from '../components'
+import { useTranslation } from '../hooks/useTranslation'
 import { useLocale } from '../providers/LocaleProvider'
 
 const tone = gemTones[defaultGemTone]
@@ -44,6 +45,7 @@ export default function Home() {
   const [nav, setNav] = useState<'home' | 'profile'>('home')
   const [confirmVisible, setConfirmVisible] = useState(false)
   const { locale, setLocale } = useLocale()
+  const t = useTranslation()
 
   return (
     <View style={styles.container}>
@@ -66,7 +68,7 @@ export default function Home() {
           value={search}
           onChangeText={setSearch}
           onClear={() => setSearch('')}
-          placeholder="Search gemstones"
+          placeholder={t.common.search}
         />
 
         <TextField label="Email" placeholder="you@example.com" value="" onChangeText={() => {}} />
@@ -126,9 +128,9 @@ export default function Home() {
         <StepMeter totalSteps={4} currentStep={1} />
         <ProgressBar progress={0.6} />
 
-        <Button label="Continue" onPress={() => {}} />
-        <GhostButton label="Not now" onPress={() => {}} />
-        <Button label="Delete account" danger onPress={() => setConfirmVisible(true)} />
+        <Button label={t.common.continue} onPress={() => {}} />
+        <GhostButton label={t.common.notNow} onPress={() => {}} />
+        <Button label={t.common.delete} danger onPress={() => setConfirmVisible(true)} />
       </ScrollView>
 
       <BottomNavBar
@@ -152,8 +154,8 @@ export default function Home() {
         visible={confirmVisible}
         title="Delete account?"
         message="This can't be undone."
-        confirmLabel="Delete"
-        cancelLabel="Cancel"
+        confirmLabel={t.common.delete}
+        cancelLabel={t.common.cancel}
         destructive
         onConfirm={() => setConfirmVisible(false)}
         onCancel={() => setConfirmVisible(false)}

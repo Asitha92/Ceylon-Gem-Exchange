@@ -18,6 +18,7 @@
     }
   },
   "dependencies": {
+    "@ceylon-gems/i18n": "workspace:*",
     "@ceylon-gems/ui-tokens": "workspace:*",
     "@clerk/expo": "4.6.2",
     "@expo-google-fonts/jost": "0.4.2",

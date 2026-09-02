@@ -87,6 +87,9 @@ importers:
 
   apps/mobile:
     dependencies:
+      '@ceylon-gems/i18n':
+        specifier: workspace:*
+        version: link:../../packages/i18n
       '@ceylon-gems/ui-tokens':
         specifier: workspace:*
         version: link:../../packages/ui-tokens
