@@ -6,6 +6,10 @@ A listing marketplace for Sri Lankan gemstones and lapidary equipment (Zepla Lab
 
 Author commits as **Asitha Senarathne \<uaasenarathne@gmail.com\>** (set as this repo's local `git config user.name`/`user.email` — doesn't affect the global identity). Do not append a `Co-Authored-By: Claude` trailer in this repo.
 
+## Verifying a change
+
+Run all three before calling a task done: `pnpm lint`, `pnpm typecheck`, and **`pnpm format:check`**. The formatter is easy to forget since it doesn't block anything — several files (a Nest guard, a mobile hook, `app.json`) went uncaught for multiple tasks before a `format:check` run caught them. If it's not clean, `pnpm format` and re-verify nothing functional changed.
+
 ## Local dev stack
 
 `docker-compose.yml` at the repo root runs Postgres, Redis, Typesense, and MinIO (`pnpm docker:up`/`docker:down`). Postgres is published on host port **55432, not 5432** — this machine has a native PostgreSQL 18 install already bound to 5432, and connecting to "localhost:5432" silently hits that instead (same server on both `127.0.0.1` and `::1`, so switching to explicit IPv4 doesn't help — only a different port does). `apps/api` loads credentials from the root `.env` (shared with `docker-compose.yml`, gitignored; `.env.example` is the tracked template) via `ConfigModule.forRoot({ envFilePath: '../../.env' })`.

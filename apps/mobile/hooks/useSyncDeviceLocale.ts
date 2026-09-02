@@ -7,7 +7,9 @@ type SupportedLocale = (typeof SUPPORTED_LOCALES)[number]
 
 function detectSupportedLocale(): SupportedLocale {
   const code = getLocales()[0]?.languageCode
-  return (SUPPORTED_LOCALES as readonly string[]).includes(code ?? '') ? (code as SupportedLocale) : 'en'
+  return (SUPPORTED_LOCALES as readonly string[]).includes(code ?? '')
+    ? (code as SupportedLocale)
+    : 'en'
 }
 
 // Pushes the device's locale to the backend once per sign-in, as a sensible

@@ -32,3 +32,7 @@ Building the mobile app + backend mechanism first, entirely against a local
 Docker stack (Postgres, Redis, Typesense, MinIO) — no cloud account needed to
 start. The web app and AWS/staging deployment are deliberately deferred until
 the mobile app and backend work end-to-end.
+
+## Docs
+
+- [Authentication](docs/authentication.md) — Clerk + our `users` table: sign-in, webhook sync, API auth guards, locale detection
