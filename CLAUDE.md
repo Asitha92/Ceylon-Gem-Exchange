@@ -8,7 +8,7 @@ Author commits as **Asitha Senarathne \<uaasenarathne@gmail.com\>** (set as this
 
 ## Verifying a change
 
-Run all three before calling a task done: `pnpm lint`, `pnpm typecheck`, and **`pnpm format:check`**. The formatter is easy to forget since it doesn't block anything — several files (a Nest guard, a mobile hook, `app.json`) went uncaught for multiple tasks before a `format:check` run caught them. If it's not clean, `pnpm format` and re-verify nothing functional changed.
+Run all three before calling a task done: `pnpm lint`, `pnpm typecheck`, and **`pnpm format:check`**. The formatter is easy to forget since it doesn't block anything — several files (a Nest guard, a mobile hook, `app.json`) went uncaught for multiple tasks before a `format:check` run caught them. If it's not clean, `pnpm format` and re-verify nothing functional changed. If touching `packages/i18n`, also run `pnpm check-i18n` (its own CI job, "Translations") — the `si: Dictionary` exact-match typing already catches a missing/extra key at `tsc` time, but this gives a dedicated, readable failure naming the exact dot-path and keeps working even if that typing is ever loosened.
 
 ## Local dev stack
 

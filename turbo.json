@@ -15,6 +15,9 @@
     "typecheck": {
       "dependsOn": ["^build"]
     },
+    "check-i18n": {
+      "dependsOn": ["^build"]
+    },
     "test": {
       "dependsOn": ["^build"]
     }
