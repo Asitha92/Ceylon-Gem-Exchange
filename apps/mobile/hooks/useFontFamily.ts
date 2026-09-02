@@ -1,10 +1,10 @@
-import { fontFamilies, type SupportedLocale } from '@ceylon-gems/ui-tokens'
+import { fontFamilies } from '@ceylon-gems/ui-tokens'
+import { useLocale } from '../providers/LocaleProvider'
 
-// Locale detection/switching lands in the next task (E0.3 #4). Every
-// text-rendering component in the kit reads its font through this one hook
-// so wiring in the real active locale later is a one-file change instead of
-// touching every component that renders text.
+// Every text-rendering component in the kit reads its font through this one
+// hook, so it's the only place that needs to know the active locale lives
+// in LocaleProvider.
 export function useFontFamily() {
-  const locale: SupportedLocale = 'en'
+  const { locale } = useLocale()
   return fontFamilies[locale]
 }

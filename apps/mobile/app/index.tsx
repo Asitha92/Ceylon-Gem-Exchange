@@ -28,6 +28,7 @@ import {
   TextField,
   Toggle,
 } from '../components'
+import { useLocale } from '../providers/LocaleProvider'
 
 const tone = gemTones[defaultGemTone]
 
@@ -42,6 +43,7 @@ export default function Home() {
   const [notify, setNotify] = useState(true)
   const [nav, setNav] = useState<'home' | 'profile'>('home')
   const [confirmVisible, setConfirmVisible] = useState(false)
+  const { locale, setLocale } = useLocale()
 
   return (
     <View style={styles.container}>
@@ -50,6 +52,15 @@ export default function Home() {
         <Show when="signed-in" fallback={<Text style={styles.subtitle}>Not signed in.</Text>}>
           <SignedInGreeting />
         </Show>
+
+        <SegmentedControl
+          options={[
+            { label: 'English', value: 'en' },
+            { label: 'සිංහල', value: 'si' },
+          ]}
+          value={locale}
+          onChange={setLocale}
+        />
 
         <SearchBar
           value={search}
