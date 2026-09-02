@@ -23,7 +23,8 @@
       "expo-splash-screen",
       "expo-secure-store",
       "expo-web-browser",
-      "@clerk/expo"
+      "@clerk/expo",
+      "expo-localization"
     ]
   }
 }
