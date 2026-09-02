@@ -1,6 +1,15 @@
 import { Show, useUser } from '@clerk/expo'
-import { colorsLight, fontFamilies, fontSize, spacing } from '@ceylon-gems/ui-tokens'
+import {
+  defaultGemTone,
+  fontFamilies,
+  fontSize,
+  gemTones,
+  neutral,
+  spacing,
+} from '@ceylon-gems/ui-tokens'
 import { StyleSheet, Text, View } from 'react-native'
+
+const tone = gemTones[defaultGemTone]
 
 export default function Home() {
   return (
@@ -25,15 +34,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: spacing.sm,
-    backgroundColor: colorsLight.background,
+    // Flat mid-stop as a placeholder — the real gradient + ambient glow
+    // background is a task 3 component (GlassSurface / screen background),
+    // not something to hand-roll here.
+    backgroundColor: tone.screen[1],
   },
   title: {
     fontSize: fontSize['2xl'],
     fontFamily: fontFamilies.en.semibold,
-    color: colorsLight.ink,
+    color: neutral.white,
   },
   subtitle: {
     fontFamily: fontFamilies.en.regular,
-    color: colorsLight.inkMuted,
+    color: `rgba(255,255,255,0.6)`,
   },
 })
