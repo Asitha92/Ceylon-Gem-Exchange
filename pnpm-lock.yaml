@@ -35,6 +35,9 @@ importers:
       '@nestjs/terminus':
         specifier: 12.0.0
         version: 12.0.0(@nestjs/common@12.0.1(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@12.0.1)(reflect-metadata@0.2.2)(rxjs@7.8.2)
+      dotenv:
+        specifier: 17.4.2
+        version: 17.4.2
       drizzle-orm:
         specifier: 0.45.2
         version: 0.45.2(@types/pg@8.23.1)(pg@8.23.0)
@@ -50,6 +53,9 @@ importers:
       rxjs:
         specifier: 7.8.2
         version: 7.8.2
+      svix:
+        specifier: 2.2.0
+        version: 2.2.0
     devDependencies:
       '@ceylon-gems/config':
         specifier: workspace:*
@@ -69,9 +75,6 @@ importers:
       '@types/pg':
         specifier: 8.23.1
         version: 8.23.1
-      dotenv:
-        specifier: 17.4.2
-        version: 17.4.2
       drizzle-kit:
         specifier: 0.31.10
         version: 0.31.10
@@ -5674,6 +5677,10 @@ packages:
   supports-preserve-symlinks-flag@1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
+
+  svix@2.2.0:
+    resolution: {integrity: sha512-CeVnfCNjgR6lryqnhzwMTLyzajv0Y+JK4W/VnHeVnLMmrqdo4YtF+1tKUmh/ZY/f/0sJUW4401LR3JrMzjROLg==}
+    engines: {node: '>=22'}
 
   terminal-link@2.1.1:
     resolution: {integrity: sha512-un0FmiRUQNr5PJqy9kP7c40F5BOfpGlYTrxonDChEZB7pzZxRNp/bt+ymiy9/npwXya9KH99nJ/GXFIiUkYGFQ==}
@@ -12354,6 +12361,10 @@ snapshots:
       supports-color: 7.2.0
 
   supports-preserve-symlinks-flag@1.0.0: {}
+
+  svix@2.2.0:
+    dependencies:
+      standardwebhooks: 1.1.1
 
   terminal-link@2.1.1:
     dependencies:

@@ -4,6 +4,7 @@ import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import { AuthModule } from './auth/auth.module'
 import { HealthModule } from './health/health.module'
+import { WebhooksModule } from './webhooks/webhooks.module'
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { HealthModule } from './health/health.module'
     ConfigModule.forRoot({ isGlobal: true, envFilePath: '../../.env' }),
     HealthModule,
     AuthModule,
+    WebhooksModule,
   ],
   controllers: [AppController],
   providers: [AppService],
