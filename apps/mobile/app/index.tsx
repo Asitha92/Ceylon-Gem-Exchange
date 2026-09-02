@@ -7,6 +7,7 @@ import {
   neutral,
   spacing,
 } from '@ceylon-gems/ui-tokens'
+import { Link } from 'expo-router'
 import { useState } from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import {
@@ -50,7 +51,15 @@ export default function Home() {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.title}>Ceylon Gems</Text>
+        <View style={styles.headerRow}>
+          <Text style={styles.title}>Ceylon Gems</Text>
+          <Link href="/locale-settings" asChild>
+            <IconButton
+              icon={<Text style={{ color: neutral.white }}>🌐</Text>}
+              accessibilityLabel={t.localeSettings.title}
+            />
+          </Link>
+        </View>
         <Show when="signed-in" fallback={<Text style={styles.subtitle}>Not signed in.</Text>}>
           <SignedInGreeting />
         </Show>
@@ -183,6 +192,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   title: {
     fontSize: fontSize['2xl'],
