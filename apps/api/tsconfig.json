@@ -9,9 +9,10 @@
     "emitDecoratorMetadata": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": "./",
+    "rootDir": "./src",
     "outDir": "./dist",
     "incremental": true,
     "strictNullChecks": true
   },
-  "exclude": ["node_modules", "dist", "test"]
+  "exclude": ["node_modules", "dist", "test", "drizzle.config.ts", "drizzle"]
 }
