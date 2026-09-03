@@ -1,5 +1,5 @@
 import { useSignUp } from '@clerk/expo'
-import { defaultGemTone, fontSize, gemTones, radii, spacing } from '@ceylon-gems/ui-tokens'
+import { defaultGemTone, fontSize, gemTones, spacing } from '@ceylon-gems/ui-tokens'
 import { Link, useRouter } from 'expo-router'
 import { useState } from 'react'
 import {
@@ -131,7 +131,7 @@ export default function SignUpScreen() {
     <LiveGradientBackground>
       <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
         <View style={styles.headerRow}>
-          <GlassSurface radius={radii.md} clarity={45} style={styles.brandTile}>
+          <GlassSurface radius={14} clarity={55} style={styles.brandTile}>
             <GemIcon size={20} ink={tone.ink} inkSoft={iconSoft} />
           </GlassSurface>
           <Text style={[styles.brandText, { fontFamily: fonts.extrabold }]}>Ceylon Gems</Text>
@@ -248,6 +248,7 @@ export default function SignUpScreen() {
         visible={pickerOpen}
         onClose={() => setPickerOpen(false)}
         closeAccessibilityLabel={t.common.cancel}
+        radius={30}
       >
         <View style={styles.pickerHeader}>
           <Text style={[styles.pickerTitle, { fontFamily: fonts.extrabold }]}>
@@ -268,6 +269,7 @@ export default function SignUpScreen() {
           onChangeText={setCountryQuery}
           placeholder={t.countryPicker.searchPlaceholder}
           leftIcon={<SearchIcon />}
+          radius={16}
           style={styles.pickerSearch}
         />
         <ScrollView style={styles.pickerList} keyboardShouldPersistTaps="handled">
@@ -304,13 +306,16 @@ const styles = StyleSheet.create({
   flex: {
     flex: 1,
   },
+  // Most values below are the mockup's exact numbers at its default
+  // glassClarity (55) / density ("Airy") — not the general spacing/
+  // fontSize scales, which don't happen to land on these numbers.
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: spacing.sm,
-    paddingTop: spacing.sm,
-    paddingBottom: spacing.xs,
+    gap: 10,
+    paddingTop: 10,
+    paddingHorizontal: 22,
   },
   brandTile: {
     width: 40,
@@ -320,27 +325,32 @@ const styles = StyleSheet.create({
   },
   brandText: {
     fontSize: fontSize.base,
+    letterSpacing: -0.2,
     color: 'rgba(255,255,255,0.9)',
   },
   content: {
-    paddingHorizontal: spacing.xl,
+    paddingHorizontal: 22,
     paddingBottom: spacing['3xl'],
-    gap: spacing.lg,
   },
   heading: {
-    marginTop: spacing.lg,
-    fontSize: fontSize['3xl'],
+    marginTop: 22,
+    fontSize: 32,
+    lineHeight: 32 * 1.1,
+    letterSpacing: -0.6,
     color: '#fff',
   },
   formError: {
+    marginTop: spacing.sm,
     fontSize: fontSize.sm,
     color: '#ff9b90',
   },
   fields: {
+    marginTop: 20,
     gap: spacing.md,
   },
   terms: {
     alignItems: 'flex-start',
+    marginTop: 18,
   },
   termsText: {
     flex: 1,
@@ -352,13 +362,13 @@ const styles = StyleSheet.create({
     color: tone.accent,
   },
   submitButton: {
-    marginTop: spacing.xs,
+    marginTop: 18,
   },
   footerRow: {
     flexDirection: 'row',
     justifyContent: 'center',
     gap: spacing.xs,
-    paddingTop: spacing.sm,
+    paddingTop: 14,
   },
   footerText: {
     fontSize: fontSize.xs,
@@ -381,7 +391,7 @@ const styles = StyleSheet.create({
   pickerClose: {
     width: 30,
     height: 30,
-    borderRadius: radii.sm,
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'rgba(255,255,255,0.1)',

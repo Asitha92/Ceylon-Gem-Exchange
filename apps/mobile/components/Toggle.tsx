@@ -1,4 +1,4 @@
-import { defaultGemTone, gemTones, radii, spacing, type GemTone } from '@ceylon-gems/ui-tokens'
+import { defaultGemTone, gemTones, type GemTone } from '@ceylon-gems/ui-tokens'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useEffect, type ReactNode } from 'react'
 import { StyleSheet, Text, View, type StyleProp, type ViewStyle } from 'react-native'
@@ -136,22 +136,24 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: '#ffffff',
   },
+  // gap and box radius are the mockups' exact termsRowStyle/boxStyle
+  // values (10, 7) — not the general spacing/radii scales.
   checkboxRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: spacing.sm,
+    gap: 10,
   },
   checkboxBox: {
     width: 20,
     height: 20,
-    borderRadius: radii.sm,
+    borderRadius: 7,
     alignItems: 'center',
     justifyContent: 'center',
   },
   checkboxBoxEmpty: {
     width: 20,
     height: 20,
-    borderRadius: radii.sm,
+    borderRadius: 7,
     backgroundColor: 'rgba(255,255,255,0.07)',
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.22)',

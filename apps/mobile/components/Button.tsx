@@ -314,17 +314,19 @@ export function Chip({ label, selected, onPress, tone = defaultGemTone, style }:
 }
 
 const styles = StyleSheet.create({
+  // height/gap/label size are the mockups' exact ctaStyle values (56, 10,
+  // 15) — not the general spacing/fontSize scales.
   pill: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: spacing.sm,
-    paddingVertical: spacing.md,
+    gap: 10,
+    height: 56,
     paddingHorizontal: spacing.xl,
     borderRadius: radii.full,
   },
   label: {
-    fontSize: fontSize.base,
+    fontSize: 15,
   },
   iconCircle: {
     width: 48,

@@ -13,6 +13,7 @@ import {
   type ViewStyle,
 } from 'react-native'
 import { useFontFamily } from '../hooks/useFontFamily'
+import { ChevronDownIcon } from './icons'
 import { GlassSurface } from './primitives/GlassSurface'
 
 interface TextFieldProps extends Pick<
@@ -30,6 +31,8 @@ interface TextFieldProps extends Pick<
   error?: string
   leftIcon?: ReactNode
   rightIcon?: ReactNode
+  /** Corner radius — defaults to the mockups' exact fieldStyle value (18), not the generic GlassSurface default. */
+  radius?: number
   style?: StyleProp<ViewStyle>
 }
 
@@ -41,6 +44,7 @@ export function TextField({
   error,
   leftIcon,
   rightIcon,
+  radius = 18,
   style,
   multiline,
   ...inputProps
@@ -57,10 +61,11 @@ export function TextField({
 
   return (
     <View style={style}>
-      {label ? <Text style={[styles.label, { fontFamily: fonts.medium }]}>{label}</Text> : null}
+      {label ? <Text style={[styles.label, { fontFamily: fonts.semibold }]}>{label}</Text> : null}
       <GlassSurface
         rim={rim}
-        clarity={50}
+        clarity={55}
+        radius={radius}
         style={[styles.fieldSurface, multiline && styles.fieldSurfaceMultiline, borderOverride]}
       >
         {leftIcon}
@@ -98,6 +103,8 @@ interface PhoneFieldProps {
   value: string
   onChangeText: (text: string) => void
   placeholder?: string
+  /** Corner radius — defaults to the mockups' exact fieldStyle value (18), not the generic GlassSurface default. */
+  radius?: number
   style?: StyleProp<ViewStyle>
 }
 
@@ -114,6 +121,7 @@ export function PhoneField({
   value,
   onChangeText,
   placeholder,
+  radius = 18,
   style,
 }: PhoneFieldProps) {
   const [focused, setFocused] = useState(false)
@@ -128,8 +136,13 @@ export function PhoneField({
 
   return (
     <View style={style}>
-      {label ? <Text style={[styles.label, { fontFamily: fonts.medium }]}>{label}</Text> : null}
-      <GlassSurface rim={rim} clarity={50} style={[styles.fieldSurface, borderOverride]}>
+      {label ? <Text style={[styles.label, { fontFamily: fonts.semibold }]}>{label}</Text> : null}
+      <GlassSurface
+        rim={rim}
+        clarity={55}
+        radius={radius}
+        style={[styles.fieldSurface, borderOverride]}
+      >
         <Pressable
           onPress={onPressCountry}
           hitSlop={6}
@@ -139,7 +152,7 @@ export function PhoneField({
         >
           <Text style={styles.dialFlag}>{countryFlag}</Text>
           <Text style={[styles.dialText, { fontFamily: fonts.semibold }]}>{countryDial}</Text>
-          <Text style={styles.dialChevron}>▾</Text>
+          <ChevronDownIcon />
         </Pressable>
         <TextInput
           value={value}
@@ -175,6 +188,8 @@ interface SearchBarProps {
   /** Screen-reader label for the clear (✕) button — pass a translated string; defaults to English. */
   clearAccessibilityLabel?: string
   leftIcon?: ReactNode
+  /** Default full-pill (Home header); a picker sheet's inline search wants the squarer 16 from its own searchStyle instead. */
+  radius?: number
   style?: StyleProp<ViewStyle>
 }
 
@@ -186,12 +201,13 @@ export function SearchBar({
   placeholder,
   clearAccessibilityLabel = 'Clear search',
   leftIcon,
+  radius = radii.full,
   style,
 }: SearchBarProps) {
   const fonts = useFontFamily()
 
   return (
-    <GlassSurface radius={radii.full} clarity={50} style={[styles.searchSurface, style]}>
+    <GlassSurface radius={radius} clarity={55} style={[styles.searchSurface, style]}>
       {leftIcon}
       <TextInput
         value={value}
@@ -250,7 +266,7 @@ export function OtpInput({ length = 6, value, onChangeText, autoFocus }: OtpInpu
   return (
     <View style={styles.otpRow}>
       {digits.map((digit, index) => (
-        <GlassSurface key={index} clarity={50} radius={radii.md} style={styles.otpCell}>
+        <GlassSurface key={index} clarity={55} radius={radii.md} style={styles.otpCell}>
           <TextInput
             ref={(ref) => {
               inputs.current[index] = ref
@@ -272,17 +288,25 @@ export function OtpInput({ length = 6, value, onChangeText, autoFocus }: OtpInpu
 }
 
 const styles = StyleSheet.create({
+  // Exact values from the Claude Design mockups' labelStyle — fixed
+  // regardless of clarity/density, not derived from the fontSize/spacing
+  // token scales.
   label: {
-    fontSize: fontSize.sm,
-    color: 'rgba(255,255,255,0.75)',
-    marginBottom: spacing.xs,
+    fontSize: 11,
+    letterSpacing: 0.4,
+    textTransform: 'uppercase',
+    color: 'rgba(255,255,255,0.62)',
+    marginBottom: spacing.sm,
   },
+  // Exact values from fieldStyle at the mockups' default glassClarity
+  // (55)/density ("Airy"): height 54, padding 14, gap 11 — not the
+  // general spacing scale, which doesn't happen to land on these numbers.
   fieldSurface: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.sm,
-    paddingHorizontal: spacing.lg,
-    minHeight: 52,
+    gap: 11,
+    paddingHorizontal: 14,
+    minHeight: 54,
   },
   fieldSurfaceMultiline: {
     alignItems: 'flex-start',
@@ -291,7 +315,7 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    fontSize: fontSize.base,
+    fontSize: fontSize.sm,
     color: neutral.white,
     paddingVertical: spacing.md,
   },
@@ -308,7 +332,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    paddingRight: spacing.sm,
+    paddingRight: 11,
     borderRightWidth: 1,
     borderRightColor: 'rgba(255,255,255,0.16)',
   },
@@ -319,16 +343,12 @@ const styles = StyleSheet.create({
     fontSize: fontSize.sm,
     color: 'rgba(255,255,255,0.85)',
   },
-  dialChevron: {
-    fontSize: fontSize.xs,
-    color: 'rgba(255,255,255,0.6)',
-  },
   searchSurface: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.sm,
-    paddingHorizontal: spacing.lg,
-    minHeight: 48,
+    gap: 10,
+    paddingHorizontal: 14,
+    minHeight: 44,
   },
   searchClear: {
     color: 'rgba(255,255,255,0.5)',

@@ -17,6 +17,8 @@ interface BottomSheetProps {
   onClose: () => void
   /** Screen-reader label for the dimmed backdrop's close tap target — pass a translated string; defaults to English. */
   closeAccessibilityLabel?: string
+  /** Top corner radius — the mockups' sheetStyle uses a bigger radius (30) than the general radii.lg default. */
+  radius?: number
   children: ReactNode
 }
 
@@ -30,6 +32,7 @@ export function BottomSheet({
   visible,
   onClose,
   closeAccessibilityLabel = 'Close',
+  radius = radii.lg,
   children,
 }: BottomSheetProps) {
   return (
@@ -41,7 +44,7 @@ export function BottomSheet({
         accessibilityRole="button"
       />
       <View style={styles.sheetWrap} accessibilityViewIsModal>
-        <GlassSurface clarity={35} radius={radii.lg} style={styles.sheet}>
+        <GlassSurface clarity={55} radius={radius} style={styles.sheet}>
           <View style={styles.grabber} />
           {children}
         </GlassSurface>

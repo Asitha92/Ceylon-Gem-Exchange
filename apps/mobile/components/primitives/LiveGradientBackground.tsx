@@ -15,8 +15,10 @@ import Svg, { Defs, RadialGradient, Rect, Stop } from 'react-native-svg'
 interface GlowBlobProps {
   /** [r, g, b] */
   color: readonly [number, number, number]
+  /** Center opacity — the mockups' glowStyle gives each of the three glows a distinct value (0.4/0.24/0.28), not one shared value. */
+  opacity: number
   size: number
-  /** Center position as a fraction of the container, 0–1. */
+  /** Center position as a fraction of the container, 0–1 — matches the mockups' glowStyle "at X% Y%" positions exactly. */
   top: number
   left: number
   /** Seconds for one drift cycle — deliberately different per blob so they don't move in lockstep. */
@@ -26,7 +28,7 @@ interface GlowBlobProps {
 // One soft radial "glow" circle, slowly drifting and breathing. Reanimated
 // drives a wrapping View's transform (GPU-friendly, per the RN skill) rather
 // than animating the SVG gradient itself.
-function GlowBlob({ color, size, top, left, duration }: GlowBlobProps) {
+function GlowBlob({ color, opacity, size, top, left, duration }: GlowBlobProps) {
   const drift = useSharedValue(0)
   const reduceMotion = useReducedMotion()
 
@@ -65,7 +67,7 @@ function GlowBlob({ color, size, top, left, duration }: GlowBlobProps) {
       <Svg width={size} height={size}>
         <Defs>
           <RadialGradient id="glow" cx="50%" cy="50%" r="50%">
-            <Stop offset="0%" stopColor={`rgb(${rgb})`} stopOpacity={0.4} />
+            <Stop offset="0%" stopColor={`rgb(${rgb})`} stopOpacity={opacity} />
             <Stop offset="100%" stopColor={`rgb(${rgb})`} stopOpacity={0} />
           </RadialGradient>
         </Defs>
@@ -109,9 +111,9 @@ export function LiveGradientBackground({
         style={StyleSheet.absoluteFill}
       />
       <View style={StyleSheet.absoluteFill}>
-        <GlowBlob color={glowA} size={420} top={0.06} left={0.82} duration={14000} />
-        <GlowBlob color={glowB} size={380} top={0.42} left={0} duration={17000} />
-        <GlowBlob color={glowC} size={460} top={1.04} left={0.55} duration={20000} />
+        <GlowBlob color={glowA} opacity={0.4} size={420} top={0.06} left={0.82} duration={14000} />
+        <GlowBlob color={glowB} opacity={0.24} size={380} top={0.42} left={0} duration={17000} />
+        <GlowBlob color={glowC} opacity={0.28} size={460} top={1.04} left={0.55} duration={20000} />
       </View>
       <LinearGradient
         colors={neutral.overlay}
