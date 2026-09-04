@@ -56,11 +56,16 @@ export function GlassSurface({
       accessibilityRole={accessibilityRole}
       style={[styles.clip, { borderRadius: radius }, style]}
     >
-      <BlurView intensity={intensity} tint="dark" style={StyleSheet.absoluteFill} />
+      <BlurView
+        intensity={intensity}
+        tint="dark"
+        style={[StyleSheet.absoluteFill, styles.behindContent]}
+      />
       <View
         pointerEvents="none"
         style={[
           styles.tint,
+          styles.behindContent,
           {
             borderRadius: radius,
             backgroundColor: `rgba(255,255,255,${fillAlpha})`,
@@ -85,5 +90,13 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     borderWidth: 1,
+  },
+  // On web, positioned descendants can paint above later in-flow content
+  // regardless of DOM order (a real CSS stacking rule React Native's own
+  // renderer doesn't have) — without this, these two absolutely-positioned
+  // decorative layers visually cover `children` (icons, text) instead of
+  // sitting behind them. Harmless no-op on native.
+  behindContent: {
+    zIndex: -1,
   },
 })
